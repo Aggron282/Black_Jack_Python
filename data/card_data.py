@@ -2,6 +2,7 @@ from art.art import art_data;
 import random
 
 card_data = [
+    
     {
         "icon":art_data["ace"],
         "isAce":True,
@@ -93,6 +94,7 @@ card_data = [
          "isAce":False,
          "name":"king",
     }
+
 ]
 
 class CardData:
@@ -102,13 +104,15 @@ class CardData:
         self.decks = decks;
         self.generated_cards = [];
         self.create_cards();
-    
-   
+     
     def deal_card(self):
+       
         random_card = random.choice(self.generated_cards);
         index = self.generated_cards.index(random_card);
+       
         try:
             self.generated_cards.remove(index);
+       
         except:
           return random_card;
     
@@ -116,8 +120,12 @@ class CardData:
     def create_cards(self):
         
         for z in range(0, self.decks):
+           
             for i in range(0,self.how_many_cards_each):
+                
                 for x in range(0, len(self.card_data)):
                     self.generated_cards.append(card_data[x]);
+        
         random.shuffle(self.generated_cards);
+        
         print(len(self.generated_cards));

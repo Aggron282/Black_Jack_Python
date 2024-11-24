@@ -1,7 +1,9 @@
 
 import time
+from data.bank import Bank;
 
 class Player:
+    
     def __init__(self,engine,who,is_dealer):
         self.did_win = False;
         self.hand = [];
@@ -9,14 +11,10 @@ class Player:
         self.is_dealer = is_dealer;
         self.engine = engine;
         self.opponent = None;
-        self.money = 0;
-        self.bet = 0;
-
-    def get_saved_money(self):
+        self.bank = None;
         if self.is_dealer != True:
-            with open("./../saved_data/money.txt") as money_file:
-                self.
-           
+            self.bank = Bank();
+        
     def set_opponent(self,opponent):
         self.opponent = opponent;
     
@@ -49,27 +47,37 @@ class Player:
         total = self.get_total();
 
         if total > 21 or total < compare:
+           
            time.sleep(1 * self.engine.print_speed_multiplier);
+           
            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~{self.opponent.who} Win!~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~{self.who} Loses!~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~{self.opponent.who} = {compare} | {self.who} = {total}~~~~~~~~~~~~~~~~~~~~~~~~")
            
            self.did_win = True;
+           if self.bank != None:
+               self.bank.bet_check(-1);
            self.opponent.set_win(False);
         
         elif total == 21 or total > compare:
+          
            time.sleep(1 * self.engine.print_speed_multiplier);
+          
            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~ {self.who} Win! ~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~ {self.opponent.who} Loses! ~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {self.who} = {total} | {self.opponent.who} = {compare} ~~~~~~~~~~~~~~~~~~~~~~~~")
            
+           if self.bank != None:
+               self.bank.bet_check(1);
            self.did_win = True;
            self.opponent.set_win(False);
  
         elif total == compare:
+          
            time.sleep(1 * self.engine.print_speed_multiplier);
+          
            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!~~~~~~~~~~~~~~~~~~~~~~~~")
            print(f"-------------------------Its a Tie------------------")
            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~!!!!!~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -78,12 +86,13 @@ class Player:
            self.opponent.set_win(True);
         
         time.sleep(1 * self.engine.print_speed_multiplier);
+     
         end = input("Game has ended press q to quit or anything else to play again");
         
         if end != "q":
             self.engine.start_game();
         else:
-            quit();
+            self.engine.quit_game();
     
     def set_win(self,did_win):
         self.did_win = did_win;
@@ -103,7 +112,9 @@ class Player:
                 
               else:
                   display += " |--??--| "
+       
         time.sleep(1 * self.engine.print_speed_multiplier);
+       
         print(display + "\n")
         
     def get_display_total(self):
